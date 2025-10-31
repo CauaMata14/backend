@@ -4,8 +4,9 @@ function verificarToken(req, res, next) {
    const { authorization } = req.headers;
 
    try {
+      const token = authorization.split(" ")[1];
       const payload = jwt.verify(
-        authorization, 
+        token, 
         process.env.JWT_SEGREDO
       );
       req.payload = payload;
@@ -17,9 +18,11 @@ function verificarToken(req, res, next) {
 
 function gerarToken(payload) {
   try {
+    const expressIn = 30;
     const token = jwt.sign(
         payload, 
-        process.env.JWT_SEGREDO
+        process.env.JWT_SEGREDO,
+        { expressIn}
     );
     return token;
   } catch (err) {
